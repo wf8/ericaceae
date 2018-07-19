@@ -1,0 +1,41 @@
+#!/usr/bin/rb
+
+
+# input files
+range_fn = "data/area_codes_8regions_336taxa_07172018.nex"
+tree_fn  = "data/Epacrids_5con_MCC_rooted1"
+out_fn   = "output/" 
+out_state_fn = out_fn + "combined_states.log"
+out_phy_fn   = out_fn + "ancestral_state.tree"
+
+
+# write the state descriptions (ranges) to file
+dat_range_01 = readDiscreteCharacterData(range_fn)
+n_areas  = dat_range_01.nchar()
+max_areas = 2  # 93 states w/ max_area = 3; 37 states w/ max_area = 2
+n_states = 0
+for (k in 0:max_areas) n_states += choose(n_areas, k)
+dat_range_n = formatDiscreteCharacterData(dat_range_01, "DEC", n_states)
+state_desc = dat_range_n.getStateDescriptions()
+state_desc_str = "state,range\n"
+for (i in 1:state_desc.size())
+{
+    state_desc_str += (i-1) + "," + state_desc[i] + "\n"
+}
+write(state_desc_str, file=out_fn + "state_labels.txt")
+
+
+
+# summarize ancestral states
+tree = readTrees(tree_fn)[1]
+state_trace = readAncestralStateTrace(file=out_state_fn)
+anc_tree = ancestralStateTree(tree=tree,
+                              ancestral_state_trace_vector=state_trace,
+                              include_start_states=true,
+                              file=out_phy_fn,
+                              burnin=2690,
+                              summary_statistic="MAP",
+                              site=1)
+
+q()
+                             
