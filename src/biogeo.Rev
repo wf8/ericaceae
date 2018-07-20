@@ -4,7 +4,7 @@
 
 # filenames
 range_fn = "data/area_codes_8regions_336taxa_07172018.nex"
-tree_fn  = "data/Epacrids_5con_MCC_rooted1"
+tree_fn  = "data/Epacrids_5con_rooted_ultra_MCC.nex"
 out_fn   = "output/" + rep
 
 # read binary (01) presence-absence range data
